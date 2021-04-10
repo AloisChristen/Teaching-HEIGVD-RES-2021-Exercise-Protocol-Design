@@ -46,13 +46,17 @@ public class Server {
                 boolean shouldRun = true;
                 boolean errorOccured = false;
 
-                out.println("Welcome to Calculator.\nSend me an operation. To quit enter QUIT command.");
+                out.println("Welcome to Calculator. Send me an operation. To quit enter QUIT command.");
                 out.flush();
                 LOG.info("Reading until client sends QUIT or closes the connection...");
-                while(shouldRun){
-                    while ((line = in.readLine()) != null) {
-                        if (line.equalsIgnoreCase("quit")) {
+
+                    while (shouldRun && ((line = in.readLine()) != null)) {
+                        errorOccured = false;
+                        if (line.equalsIgnoreCase("QUIT")) {
                             shouldRun = false;
+                            out.println("QUITTING...");
+                            out.flush();
+                            continue;
                         }
 
                         String splited[] = line.split(" ");
@@ -71,7 +75,7 @@ public class Server {
                                 number1 = Double.parseDouble(splited[1]);
                                 number2 = Double.parseDouble(splited[2]);
                             } catch (NumberFormatException e) {
-                                out.println("ERROR BAD NUMBER FORMAT");
+                                out.println("ERROR : BAD NUMBER FORMAT");
                                 errorOccured = true;
                             }
                         }
@@ -92,12 +96,11 @@ public class Server {
                             }
                         }
                         if (!errorOccured) {
-                            out.println("RESPONSE " + result);
+                            out.println("RESPONSE : " + result);
                         }
-
                         out.flush();
                     }
-                }
+
                 LOG.info("Cleaning up resources...");
                 clientSocket.close();
                 in.close();

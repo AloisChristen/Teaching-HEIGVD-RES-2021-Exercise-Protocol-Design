@@ -30,13 +30,18 @@ public class Client {
 
             while (true){
                 String line;
-                while ((line = in.readLine()) != null) {
+                if ((line = in.readLine()) != null) {
                     System.out.println(line);
+                    if(!line.equalsIgnoreCase("QUITTING...")){
+                        Scanner scan = new Scanner(System.in);
+                        String operation = scan.nextLine();
+                        out.println(operation);
+                        out.flush();
+                    }else{
+                        clientSocket.close();
+                        break;
+                    }
                 }
-
-                Scanner scan = new Scanner(System.in);
-                String operation = scan.nextLine();
-                out.println(operation);
             }
 
         } catch (IOException ex) {
